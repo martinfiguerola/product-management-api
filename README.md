@@ -43,7 +43,7 @@ I will try to apply best practices with **ResponseEntity** responses and **Optio
 
 ---
 
-## Recommended Technologies
+## Implemented Technologies / Themes
 - **Spring Boot**: To create the REST API.
 - **Spring Data JPA**: To simplify interaction with the MySQL database.
 - **DTOs**: To separate the presentation layer from the data layer.
