@@ -26,7 +26,7 @@ I will try to apply best practices with **ResponseEntity** responses and **Optio
 ### API Endpoints
 - `GET /products`: Retrieve all products.
 - `GET /products/{id}`: Retrieve a specific product by ID.
-- - `GET /products/{productName}`: Retrieve a specific product by ID.
+- `GET /products/{productName}`: Retrieve a specific product by ID.
 - `POST /products`: Create a new product.
 - `PUT /products/{id}`: Update an existing product.
 - `DELETE /products/{id}`: Delete a product.
