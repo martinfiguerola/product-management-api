@@ -31,4 +31,28 @@ public class ProductController{
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
     }
 
+    // Build Get Product REST API
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getById (@PathVariable Long id) {
+       return productService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Build Update Product REST API
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> updateProduct (@PathVariable Long id, @RequestBody Product product) {
+         return productService.update(id, product)
+                 .map( productUpdated ->  new ResponseEntity<>(productUpdated, HttpStatus.CREATED))
+                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Build Delete Product REST API
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteProduct (@PathVariable Long id) {
+        if (productService.delete(id)) return ResponseEntity.ok("Product removed successfully");
+        return ResponseEntity.notFound().build();
+    }
+
+
 }
