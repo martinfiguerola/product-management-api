@@ -56,4 +56,9 @@ public class ProductServiceImpl implements ProductService{
                 .orElse(false);
     }
 
+    @Override
+    public List<Product> findByName(String name) {
+        return productRepository.findByNameContaining(name);
+    }
+
 }

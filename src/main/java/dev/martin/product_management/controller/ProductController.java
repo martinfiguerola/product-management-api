@@ -54,5 +54,11 @@ public class ProductController{
         return ResponseEntity.notFound().build();
     }
 
+    // Build Get Product By Name REST API
+    @GetMapping("/name/{productName}")
+    public ResponseEntity<List<Product>> getOneProductByName (@PathVariable String productName ) {
+        return new ResponseEntity<>(productService.findByName(productName), HttpStatus.OK);
+    }
+
 
 }
