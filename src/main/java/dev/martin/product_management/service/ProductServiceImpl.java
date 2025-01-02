@@ -1,9 +1,11 @@
 package dev.martin.product_management.service;
 
+import dev.martin.product_management.dto.ProductDTO;
 import dev.martin.product_management.entity.Product;
 import dev.martin.product_management.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,19 +19,81 @@ public class ProductServiceImpl implements ProductService{
         this.productRepository = productRepository;
     }
 
+    // Non-Stream Method
     @Override
-    public Product save(Product product) {
-        return productRepository.save(product);
+    public ProductDTO save(ProductDTO productDTO) {
+
+        // 1. Convert DTO to an entity
+        Product product = new Product();
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setCategory(productDTO.getCategory());
+
+        // 2. Only at this time, it is saved in the database.
+        Product productDB = productRepository.save(product);
+
+        // 3. The entity created is transformed into a dto
+        ProductDTO productDTOResponse = new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getCategory()
+        );
+        // 4. return DTO
+        return productDTOResponse;
     }
 
+    // Non-Stream Method
     @Override
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductDTO> findAll() {
+
+        // List for saving ProductDTOS
+        List<ProductDTO> productDTOS = new ArrayList<>();
+
+        // Retrieves all entities from database
+        List<Product> productList = productRepository.findAll();
+
+        // Transform each product into a DTO
+        for (Product product : productList){
+            productDTOS.add(new ProductDTO(
+                    product.getId(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getCategory())
+            );
+        }
+
+        return productDTOS;
     }
 
+    // Non-Stream Method
     @Override
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    public Optional<ProductDTO> findById(Long id) {
+
+        // Search for the product in the database
+        Optional<Product> optionalProduct = productRepository.findById(id);
+
+        // Check if it exists and transform into DTO
+        if (optionalProduct.isPresent()){
+
+            Product product = optionalProduct.get();
+
+            ProductDTO productDTO = new ProductDTO(
+                    product.getId(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getCategory()
+                    );
+
+            return Optional.of(productDTO);
+        }
+
+        // If it does not exist, return an Empty Optional
+        return Optional.empty();
     }
 
     @Override

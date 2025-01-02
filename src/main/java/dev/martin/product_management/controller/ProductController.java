@@ -1,5 +1,6 @@
 package dev.martin.product_management.controller;
 
+import dev.martin.product_management.dto.ProductDTO;
 import dev.martin.product_management.entity.Product;
 import dev.martin.product_management.service.ProductService;
 import org.springframework.http.HttpStatus;
@@ -21,19 +22,19 @@ public class ProductController{
 
     // Build Add Product REST API
     @PostMapping
-    public ResponseEntity<Product> createProduct (@RequestBody Product product) {
-        return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
+    public ResponseEntity<ProductDTO> createProduct (@RequestBody ProductDTO productDTO) {
+        return new ResponseEntity<>(productService.save(productDTO), HttpStatus.CREATED);
     }
 
     // Build Get All Product REST API
     @GetMapping
-    public ResponseEntity<List<Product>> getAll () {
+    public ResponseEntity<List<ProductDTO>> getAll () {
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
     }
 
     // Build Get Product REST API
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getById (@PathVariable Long id) {
+    public ResponseEntity<ProductDTO> getById (@PathVariable Long id) {
        return productService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
