@@ -1,6 +1,7 @@
 package dev.martin.product_management.service;
 
 import dev.martin.product_management.dto.ProductDTO;
+import dev.martin.product_management.dto.ProductDTOMapper;
 import dev.martin.product_management.entity.Product;
 import dev.martin.product_management.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -14,33 +15,25 @@ public class ProductServiceImpl implements ProductService{
 
     // Dependency Injection
     private final ProductRepository productRepository;
+    private final ProductDTOMapper productDTOMapper;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductDTOMapper productDTOMapper) {
         this.productRepository = productRepository;
+        this.productDTOMapper = productDTOMapper;
     }
 
-    // Non-Stream Method
+    // Stream Method
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-
         // 1. Convert DTO to an entity
-        Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setPrice(productDTO.getPrice());
-        product.setCategory(productDTO.getCategory());
+        Product product = productDTOMapper.toEntity(productDTO);
 
         // 2. Only at this time, it is saved in the database.
-        Product productDB = productRepository.save(product);
+        Product productCreated = productRepository.save(product);
 
         // 3. The entity created is transformed into a dto
-        ProductDTO productDTOResponse = new ProductDTO(
-                product.getId(),
-                product.getName(),
-                product.getDescription(),
-                product.getPrice(),
-                product.getCategory()
-        );
+        ProductDTO productDTOResponse = productDTOMapper.toDTO(productCreated);
+
         // 4. return DTO
         return productDTOResponse;
     }
