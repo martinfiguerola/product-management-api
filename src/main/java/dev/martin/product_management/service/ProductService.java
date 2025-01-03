@@ -11,7 +11,7 @@ public interface ProductService {
     ProductDTO save (ProductDTO productDTO);
     List<ProductDTO> findAll ();
     Optional<ProductDTO> findById (Long id);
-    Optional<Product> update (Long id, Product product);
+    Optional<ProductDTO> update (Long id, ProductDTO productDTO);
     Boolean delete (Long id);
-    List<Product> findByName (String name);
+    List<ProductDTO> findByName (String name);
 }

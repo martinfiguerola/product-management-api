@@ -97,32 +97,68 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Optional<Product> update(Long id, Product product) {
-        // If found, updates and returns object already created
-        // If not found, Optional.empty() is returned
+    public Optional<ProductDTO> update(Long id, ProductDTO productDTO) {
+        /*
+           If found, updates and returns object already created
+           If not found, Optional.empty() is returned
+        */
         return productRepository.findById(id)
                 .map(productExist -> {
-                    productExist.setName(product.getName());
-                    productExist.setDescription(product.getDescription());
-                    productExist.setCategory(product.getCategory());
-                    productExist.setPrice(product.getPrice());
-                    return productExist;
+                    // Update exist Product
+                    productExist.setName(productDTO.getName());
+                    productExist.setDescription(productDTO.getDescription());
+                    productExist.setCategory(productDTO.getCategory());
+                    productExist.setPrice(productDTO.getPrice());
+
+                    // Save updated Product
+                    Product productDB = productRepository.save(productExist);
+
+                    // Convert ProductEntity to ProductDTO
+                    ProductDTO productDTOCreated = new ProductDTO(
+                            productDB.getId(),
+                            productDB.getName(),
+                            productDB.getDescription(),
+                            productDB.getPrice(),
+                            productDB.getCategory()
+                    );
+
+                    return productDTOCreated;
                 });
     }
 
     @Override
     public Boolean delete(Long id) {
-        return productRepository.findById(id)
-                .map(productExist -> {
+        return productRepository.findById(id).map(productExist -> {
                     productRepository.delete(productExist);
                     return true;
-                })
-                .orElse(false);
+        }).orElse(false);
     }
 
     @Override
-    public List<Product> findByName(String name) {
-        return productRepository.findByNameContaining(name);
+    public List<ProductDTO> findByName(String name) {
+
+        // Retrieves all entities from database
+        List<Product> productList = productRepository.findByNameContaining(name);
+
+        // List for saving ProductDTOS
+        List<ProductDTO> productDTOS = new ArrayList<>();
+
+        // Transform each product into a DTO
+        for (Product product : productList) {
+            ProductDTO productDTO = new ProductDTO(
+                    product.getId(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getCategory()
+            );
+
+            // Save each transformed product
+            productDTOS.add(productDTO);
+        }
+
+        return productDTOS;
+
     }
 
 }

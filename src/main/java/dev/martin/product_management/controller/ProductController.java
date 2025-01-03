@@ -42,8 +42,8 @@ public class ProductController{
 
     // Build Update Product REST API
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct (@PathVariable Long id, @RequestBody Product product) {
-         return productService.update(id, product)
+    public ResponseEntity<ProductDTO> updateProduct (@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+         return productService.update(id, productDTO)
                  .map( productUpdated ->  new ResponseEntity<>(productUpdated, HttpStatus.CREATED))
                  .orElse(ResponseEntity.notFound().build());
     }
@@ -57,7 +57,7 @@ public class ProductController{
 
     // Build Get Product By Name REST API
     @GetMapping("/name/{productName}")
-    public ResponseEntity<List<Product>> getOneProductByName (@PathVariable String productName ) {
+    public ResponseEntity<List<ProductDTO>> getOneProductByName (@PathVariable String productName ) {
         return new ResponseEntity<>(productService.findByName(productName), HttpStatus.OK);
     }
 
