@@ -1,10 +1,7 @@
 package dev.martin.product_management.dto;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Setter
-@Getter
+
 public class ProductDTO {
     /**
      * Unique identifier of the product.
@@ -27,6 +24,26 @@ public class ProductDTO {
         this.description = description;
         this.price = price;
         this.category = category;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     // toString method (optional for debug)
